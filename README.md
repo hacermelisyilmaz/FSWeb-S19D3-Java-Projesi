@@ -136,18 +136,31 @@ Aşağıda istenilen sonuçlara ulaşabilmek için gerekli SQL sorgularını yaz
 	
 	21) Daha önceden oluşturduğunu tüm prosedürleri silin.
 	
+        DROP PROCEDURE IF EXIST "ogrencilistesi";
+        DROP PROCEDURE IF EXIST "sil";
+        DROP PROCEDURE IF EXIST "ekle";
+        DROP PROCEDURE IF EXIST "sinifGuncelle";
+        DROP PROCEDURE IF EXIST "ogrenciAra";
 	
 	#Esnek görevler (Esnek görevlerin hepsini Select in Select ile gerçekleştirmeniz beklenmektedir.)
 	22) Select in select yöntemiyle dram türündeki kitapları listeleyiniz.
 	
+        SELECT * FROM kitap WHERE turno = (SELECT turno FROM tur WHERE turadi = "DRAM")
 	
 	23) Adı e harfi ile başlayan yazarların kitaplarını listeleyin.
 	
+        SELECT * FROM kitap WHERE yazarno IN (SELECT yazarno FROM yazar WHERE yazarad LIKE "e%")
 	
 	24) Kitap okumayan öğrencileri listeleyiniz.
 	
+        SELECT * FROM ogrenci WHERE ogrno NOT IN (SELECT * FROM islem)
 	
 	25) Okunmayan kitapları listeleyiniz
 
+        SELECT * FROM kitap WHERE kitapno NOT IN (SELECT * FROM islem)
 	
 	26) Mayıs ayında okunmayan kitapları listeleyiniz.
+
+        SELECT * FROM kitap WHERE kitapno NOT IN (SELECT kitapno FROM islem 
+        WHERE EXTRACT (MONTH FROM atarih::timestamp) = 5)
+        AND EXTRACT (MONTH FROM vtarih::timestamp) = 5)
