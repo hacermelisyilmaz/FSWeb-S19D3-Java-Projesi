@@ -74,33 +74,65 @@ Aşağıda istenilen sonuçlara ulaşabilmek için gerekli SQL sorgularını yaz
 
 	11) Doğum tarihi null olan öğrencileri listeleyin. (insert sorgusu ile girilen 3 öğrenci listelenecektir)
 	
+        SELECT * FROM ogrenci WHERE dtarih IS NULL
 	
 	12) Doğum tarihi null olan öğrencileri silin. 
 	
+        DELETE FROM ogrenci WHERE dtarih IS NULL
 	
 	13) Kitap tablosunda adı a ile başlayan kitapların puanlarını 2 artırın.
 	
+        UPDATE kitap SET puan = puan + 2 WHERE kitapadi LIKE "a%"
 	
 	14) Kişisel Gelişim isimli bir tür oluşturun.
 	
+        INSERT INTO tur (turadi) VALUES ("Kişisel Gelişim")
 	
 	15) Kitap tablosundaki Başarı Rehberi kitabının türünü bu tür ile değiştirin.
 	
+        UPDATE kitap SET turno = (SELECT turno FROM tur WHERE turadi = "Kişisel Gelişim") WHERE kitapadi = "Başarı Rehberi"
 	
 	16) Öğrenci tablosunu kontrol etmek amaçlı tüm öğrencileri görüntüleyen "ogrencilistesi" adında bir prosedür oluşturun.
 	
+        CREATE OR REPLACE PROCEDURE ogrencilistesi LANGUAGE "sql" AS $BODY$
+            SELECT * FROM ogrenci
+        $BODY$
 	
 	17) Öğrenci tablosuna yeni öğrenci eklemek için "ekle" adında bir prosedür oluşturun.
 	
+        CREATE OR REPLACE PROCEDURE ekle(
+            IN ograd character varying, 
+            IN ogrsoyad character varying, 
+            IN cinsiyet character varying, 
+            IN sinif character varying, 
+            IN dtarih character varying, 
+            IN grade integer) 
+        LANGUAGE "sql" AS ogr 
+        AS $BODY$
+            INSERT INTO ogrenci
+            VALUES (ogr.ograd, ogr.ogrsoyad, ogr.cinsiyet, ogr.sinif, ogr.dtarih, ogr.grade)
+        $BODY$
 	
 	18) Öğrenci noya göre öğrenci silebilmeyi sağlayan "sil" adında bir prosedür oluşturun.
 	
+        CREATE OR REPLACE PROCEDURE sil(IN ogrencino integer) 
+        LANGUAGE "sql" AS $BODY$
+            DELETE FROM ogrenci WHERE ogrno = ogrencino
+        $BODY$
 	
 	19) Öğrenci numarasını kullanarak kolay bir biçimde öğrencinin sınıfını değiştirebileceğimiz bir prosedür oluşturun.
 	
+        CREATE OR REPLACE PROCEDURE sinifGuncelle(IN ogrencino integer, IN ogrencisinif character varying) 
+        LANGUAGE "sql" AS $BODY$
+            UPDATE ogrenci SET sinif = ogrencisinif WHERE ogrno = ogrencisinif
+        $BODY$
 	
 	20) Öğrenci adı ve soyadını "Ad Soyad" olarak birleştirip, ad soyada göre kolayca arama yapmayı sağlayan bir prosedür yazın.
 	
+        CREATE OR REPLACE PROCEDURE ogrenciAra(IN tamad character varying) 
+        LANGUAGE "sql" AS $BODY$
+            SELECT * FROM ogrenci WHERE CONCAT(ograd, " ", ogrsoyad) LIKE CONCAT("%", tamad, "%")
+        $BODY$
 	
 	21) Daha önceden oluşturduğunu tüm prosedürleri silin.
 	
