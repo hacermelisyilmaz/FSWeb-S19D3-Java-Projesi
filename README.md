@@ -29,35 +29,48 @@ Aşağıda istenilen sonuçlara ulaşabilmek için gerekli SQL sorgularını yaz
 
 	1) ÖRNEK SORU: Yazar tablosunu KEMAL UYUMAZ isimli yazarı ekleyin.
 	
-
+        INSERT INTO yazar(yazarad, yazarsoyad) VALUES("Kemal", "Uyumaz")
 	
 	2) Biyografi türünü tür tablosuna ekleyiniz.
 	
+        INSERT INTO tur(turadi) VALUES("Biyografi")
 	
 	3) 10A sınıfı olan ÇAĞLAR ÜZÜMCÜ isimli erkek, sınıfı 9B olan LEYLA ALAGÖZ isimli kız ve sınıfı 11C olan Ayşe Bektaş isimli kız öğrencileri tek sorguda ekleyin. 
 	
+        INSERT INTO ogrenci(ogrno, ograd, ogrsoyad, cinsiyet, sinif) VALUES (162, "Çağlar", "Üzümcü", "E", "10A"), (163, "Leyla", "Alagöz", "K", "9B"), (164, "Ayşe", "Bektaş", "K", "11C")
 	
 	4) Öğrenci tablosundaki rastgele bir öğrenciyi yazarlar tablosuna yazar olarak ekleyiniz.
 	
+        INSERT INTO yazar(yazarad, yazarsoyad) SELECT ograd, ogrsoyad FROM ogrenci ORDER BY RAND() LIMIT 1
 	
 	5) Öğrenci numarası 10 ile 30 arasındaki öğrencileri yazar olarak ekleyiniz.
 	
+        INSERT INTO yazar(yazarad, yazarsoyad) SELECT ograd, ogrsoyad FROM ogrenci WHERE ogrno >= 10 AND ogrno <= 30 
 	
 	6) Nurettin Belek isimli yazarı ekleyip yazar numarasını yazdırınız.
 	(Not: Otomatik arttırmada son arttırılan değer @@IDENTITY değişkeni içinde tutulur.)
 	
+        INSERT INTO yazar (yazarad, yazarsoyad) VALUES ('Nurettin', 'Belek');
+        DECLARE @InsertedID INT;
+        SET @InsertedID = @@IDENTITY;
+
+        INSERT INTO yazar (yazarad, yazarsoyad) VALUES ("Nurettin", "Belek") SELECT @IDENTITY AS yazarno // ??
 	
 	7) 10B sınıfındaki öğrenci numarası 3 olan öğrenciyi 10C sınıfına geçirin.
 	
+        UPDATE ogrenci SET sinif = "10C" WHERE ogrno = 3
 	
 	8) 9A sınıfındaki tüm öğrencileri 10A sınıfına aktarın
 	
+        UPDATE ogrenci SET sinif = "10A" WHERE sinif = "9A"
 	
 	9) Tüm öğrencilerin puanını 5 puan arttırın.
 	
+        UPDATE ogrenci SET puan = puan + 5
 	
 	10) 25 numaralı yazarı silin.
 
+        DELETE FROM yazar WHERE yazarno = 25
 
 	11) Doğum tarihi null olan öğrencileri listeleyin. (insert sorgusu ile girilen 3 öğrenci listelenecektir)
 	
